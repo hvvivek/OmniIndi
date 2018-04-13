@@ -12,226 +12,42 @@
     <title>Hello, world!</title>
   </head>
   <body>
-        <svg id="curve-layer" width="100vw" height="100vh">
+        <svg id="curve-layer">
         </svg>
+        <div id="random-content"></div>
+        <div id="omni-data-viz">
+            
 
-        <div class="container-fluid">    
-            <div class="row align-items-center full-screen">
-                <div class="col-2 level-0">
-                </div>
-                <div class="col">
-                </div>
-                <div class="col level-1">
-                </div>
-                <div class="col">
-                </div>
-                <div class="col level-2">
-                </div>
-                <div class="col">
-                </div>
-                <div class="col level-3">
-                </div>
-                <div class="col">
-                </div>
-                <div class="col level-4">
-                </div>
-                <div class="col">
-                </div>
-                <div class="col level-5">
+            <div class="container-fluid">    
+                <div class="row align-items-center full-screen">
+                    <div class="col-2 level-0">
+                    </div>
+                    
+                    <div class="col level-1">
+                    </div>
+                    
+                    <div class="col level-2">
+                    </div>
+                    
+                    <div class="col level-3">
+                    </div>
+                    
+                    <div class="col level-4">
+                    </div>
+                    
+                    <div class="col level-5">
+                    </div>
                 </div>
             </div>
         </div>
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v3.js"></script>
-    <script>
-        
-        var data_copy;
-        var data_copy_2;
+    <script src="js/script.js"></script>
 
-        d3.csv("x2.csv", function(error, data) {
-            if (error) throw error;
-            
-            
-            data_copy = data;
-            for(var i=0; i<data.length; i++)
-            {
-                node = data[i]
-                if(node.level!=2)
-                {
-                    d3.select(".level-"+node.level).append("div").attr('class', 'node').attr("id", 'node-'+node.id).attr('active', 'false').html(node.name)
-                }
-                else
-                {
-                    d3.select(".level-"+node.level).append("div").attr('class', 'node').attr("id", 'node-'+node.id).attr('active', 'false')
-                }
-            }
-
-            for(var i=0; i<data.length; i++)
-            {
-                node = data[i]
-                var div =   d3.select('#node-'+node.id)[0]  
-                var box = div[0].getBoundingClientRect();
-                d3.select('#node-'+node.id).attr('xr', box.right).attr('yr', box.top + (box.bottom-box.top)/2).attr('xl', box.left).attr('yl', box.top + (box.bottom-box.top)/2)
-            }
-
-            for(var i=0; i<data.length; i++)
-            {
-                node = data[i]
-                var connections = node.connections.split(",");
-                for(var j=0; j<connections.length; j++)
-                {
-                    if(parseInt(connections[j]))
-                    {
-                    x1 = parseInt(d3.select("#node-"+node.id)[0][0].getAttribute('xr'));
-                    y1 = parseInt(d3.select("#node-"+node.id)[0][0].getAttribute('yr'));
-                    x2 = parseInt(d3.select("#node-"+connections[j])[0][0].getAttribute('xl'));
-                    y2 = parseInt(d3.select("#node-"+connections[j])[0][0].getAttribute('yl'));
-
-
-                    var curveData = [{ x: x1, y: y1 }, { x: x2, y: y2 }];
-                    var edge = d3.select('svg').append('g');
-                    var diagonal = d3.svg.diagonal()
-                    .source(function (d) { return { x: d[0].y, y: d[0].x }; })            
-                    .target(function (d) { return { x: d[1].y, y: d[1].x }; })
-                    .projection(function (d) { return [d.y, d.x]; });
-                    
-                    d3.select('g')
-                    .datum(curveData)
-                    .append('path')
-                    .attr('class', 'link node-from-' + node.id + " node-to-" + connections[j])
-                    .attr('d', diagonal)
-                    .attr('stroke', "#444")
-                    .attr('stroke-width', 2)
-                    .attr('fill', 'none');
-                    }
-                }
-            }
-
-            
-
-
-            $(".node").on('click', function(){
-                $('.node').removeClass('active')
-                $('.node-start').removeClass('active')
-                $(this).addClass('active')
-                $('.link').removeClass('path')
-                if(this.getAttribute('active') == 'true')
-                {
-                    this.setAttribute('active', 'false')
-                    nodeId = parseInt(this.getAttribute("id").split("-")[1])
-                    $('.node-from-'+nodeId).removeClass('path')
-                    $('.node-to-'+nodeId).removeClass('path')
-                }
-                else
-                {
-                    this.setAttribute('active', 'true')
-                    nodeId = parseInt(this.getAttribute("id").split("-")[1])
-                    $('.node-from-'+nodeId).addClass('path')
-                    $('.node-to-'+nodeId).addClass('path')
-                }
-            })
-
-            
-            //   console.log(flare)
-            });
-
-
-            d3.csv("x1.csv", function(error, data) {
-                if (error) throw error;
-            
-            
-                data_copy_2 = data;
-                for(var i=0; i<data.length; i++)
-                {
-                    node = data[i]
-                    d3.select(".level-0").append("div").attr('class', 'node-start').attr("id", 'node-0'+i).attr('active', 'false').html(node.name)
-                }
-
-                $(".node-start").on('click', function(){
-                    $('.node').removeClass('active')
-                    $('.node-start').removeClass('active')
-                    $(this).addClass('active')
-                    $('.link').removeClass('path')
-                    var index = parseInt(this.getAttribute('id').split('-')[1])
-                    nodes = data_copy_2[index].sequence.split(',')
-                    
-                    $('.node-from-0'+index + '.node-to-'+nodes[0]).addClass('path')
-
-                    for(var i=0; i<nodes.length; i++)
-                    {
-                        nodes[i] = parseInt(nodes[i])
-                        $("#node-"+nodes[i]).addClass('active')
-                        if(i+1 < nodes.length)
-                        {
-                            $('.node-from-'+nodes[i] + '.node-to-'+nodes[i+1]).addClass('path')
-
-                        }
-                    }
-                })
-
-                for(var i=0; i<data.length; i++)
-                {
-                    node = data[i]
-                    var div =   d3.select('#node-0'+i)[0]  
-                    var box = div[0].getBoundingClientRect();
-                    d3.select('#node-0'+i).attr('xr', box.right).attr('yr', box.top + (box.bottom-box.top)/2).attr('xl', box.left).attr('yl', box.top + (box.bottom-box.top)/2)
-                }
-
-                    for(var i=0; i<data.length; i++)
-                    {
-                        node = data[i]
-                        var connection = node.sequence.split(",")[0];
-                        // for(var j=0; j<connections.length; j++)
-                        // {
-                            if(parseInt(connection)>-1)
-                            {
-                            x1 = parseInt(d3.select("#node-0"+i)[0][0].getAttribute('xr'));
-                            y1 = parseInt(d3.select("#node-0"+i)[0][0].getAttribute('yr'));
-                            x2 = parseInt(d3.select("#node-"+connection)[0][0].getAttribute('xl'));
-                            y2 = parseInt(d3.select("#node-"+connection)[0][0].getAttribute('yl'));
-
-
-                            var curveData = [{ x: x1, y: y1 }, { x: x2, y: y2 }];
-                            var edge = d3.select('svg').append('g');
-                            var diagonal = d3.svg.diagonal()
-                            .source(function (d) { return { x: d[0].y, y: d[0].x }; })            
-                            .target(function (d) { return { x: d[1].y, y: d[1].x }; })
-                            .projection(function (d) { return [d.y, d.x]; });
-                            
-                            d3.select('g')
-                            .datum(curveData)
-                            .append('path')
-                            .attr('class', 'link node-from-0' + i + " node-to-" + connection)
-                            .attr('d', diagonal)
-                            .attr('stroke', "#444")
-                            .attr('stroke-width', 2)
-                            .attr('fill', 'none');
-                            // }
-                        }
-                    }
-                });
-
-            
-        // var curveData = [{ x: 190, y: 100 }, { x: 360, y: 150 }];
-        // var edge = d3.select('svg').append('g');
-        // var diagonal = d3.svg.diagonal()
-        // .source(function (d) { return { x: d[0].y, y: d[0].x }; })            
-        // .target(function (d) { return { x: d[1].y, y: d[1].x }; })
-        // .projection(function (d) { return [d.y, d.x]; });
-        
-        // d3.select('g')
-        // .datum(curveData)
-        // .append('path')
-        // .attr('class', 'link')
-        // .attr('d', diagonal)
-        // .attr('stroke', "#444")
-        // .attr('stroke-width', 2)
-        // .attr('fill', 'none');
-    </script>
+    
     </body>
 </html>

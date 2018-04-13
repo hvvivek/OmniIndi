@@ -1,3 +1,10 @@
+html{
+    min-height:100%;/* make sure it is at least as tall as the viewport */
+    position:relative;
+}
+body{
+    height:100%; /* force the BODY element to match the height of the HTML element */
+}
 body
 {
     background-color: black;
@@ -9,29 +16,41 @@ body
 
 .node
 {
-    height: 3em;
-    padding-top: 0.3em;
+    height: 2em;
+    padding-top: 0.5em;
     color: white;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     text-align: center;
     cursor:pointer;
-    font-size: 1em;
+    font-size: 1.2em;
+    width: 50%;
+    margin: 0 auto;
 }
 
 .node-start
 {
-    height: 1.6em;
-    padding-top: 0.3em;
+    height: 2em;
+    padding-top: 0.5em;
     color: white;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     text-align: center;
     cursor:pointer;
-    font-size: 1em;
+    font-size: 1.2em;
+    width: 80%;
+    margin: 0 auto;
 }
 
 #curve-layer
 {
     position: absolute;
+    width: 1000vw; 
+    height: 1000vh;
+
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    overflow:hidden;
 
 }
 
@@ -68,6 +87,7 @@ path
       display: inline; */
       background-image: url(logo.gif);
       background-size: cover;
+      color: transparent;
       height: 200px;
       width: 200px;
   }
@@ -81,4 +101,29 @@ path
   .level-1 div, .level-2 div, .level-3 div, .level-4 div, .level-5 div
   {
       margin-bottom: 1em;
+  }
+
+
+  #random-content
+  {
+    width: 100vw;
+    height: 100vh;
+    background-color: blueviolet;
+    position: relative;
+  }
+
+  #omni-data-viz svg
+  {
+    width: 100vw; 
+    height: max-content;
+  }
+  #omni-data-viz svg
+  {
+      position: absolute;
+      margin-top: 1em;
+  }
+
+  #omni-data-viz .container-fluid
+  {
+      position: absolute;
   }
